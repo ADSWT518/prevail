@@ -75,6 +75,12 @@ std::tuple<bool, double> abs_validate(Cfg const& simple_cfg, string domain_name,
     double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
 
     int nwarn = checks.get_total_warning() + checks.get_total_error();
+
+    int ww = checks.get_total_warning();
+    int er = checks.get_total_error();
+    //std::cout <<  "nwarn = " << nwarn << ", warn = "<< ww << ", error = " << er <<"\n";
+
+
     if (global_options.print_invariants) {
         for (string label : sorted_labels(cfg)) {
             pre_printer(label);
@@ -110,10 +116,24 @@ static auto extract_post(analyzer_t& analyzer)
     return res;
 }
 
+//template<typename analyzer_t>
+//static checks_db check(analyzer_t& analyzer)
+//{
+//    int verbose = global_options.print_failures ? 2 : 0; 
+//    using checker_t = intra_checker<analyzer_t>;
+//    using prop_checker_ptr = typename checker_t::prop_checker_ptr;
+//    checker_t checker(analyzer, {
+//        prop_checker_ptr(new assert_property_checker<analyzer_t>(verbose))
+//    });
+//    checker.run();
+//    return checker.get_all_checks();
+//}
+
+
 template<typename analyzer_t>
 static checks_db check(analyzer_t& analyzer)
 {
-    int verbose = global_options.print_failures ? 2 : 0;
+    int verbose = global_options.print_failures ? 2 : 0; 
     using checker_t = intra_checker<analyzer_t>;
     using prop_checker_ptr = typename checker_t::prop_checker_ptr;
     checker_t checker(analyzer, {
@@ -122,6 +142,7 @@ static checks_db check(analyzer_t& analyzer)
     checker.run();
     return checker.get_all_checks();
 }
+
 
 static checks_db dont_analyze(cfg_t& cfg, printer_t& printer, printer_t& post_printer)
 {
@@ -186,18 +207,24 @@ const map<string, domain_desc> domains{
     { "zoneElina", { analyze<array_expansion_domain<z_zones_elina_domain_t>>, "zone (elina)" } },
     { "octElina" , { analyze<array_expansion_domain<z_oct_elina_domain_t>>  , "octagon (elina)" } },
     { "polyElina", { analyze<array_expansion_domain<z_pk_elina_domain_t>>   , "polyhedra (elina)" } },
+    { "wrapped"           , { analyze<array_expansion_domain<z_wrapped_interval_domain_t>>, "mem: wrapped interval domain (z_wrapped_interval_domain_t)" } },
+    { "swrapped"           , { analyze<array_expansion_domain<z_swrapped_interval_domain_t>>, "mem: swrapped interval domain (z_swrapped_interval_domain_t)" } },
+    { "tnum"           , { analyze<array_expansion_domain<z_tnum_domain_t>>, "mem: tnum domain (z_tnum_domain_t)" } },
+    { "stnum"           , { analyze<array_expansion_domain<z_stnum_domain_t>>, "mem: stnum domain (z_stnum_domain_t)" } },
+    { "switv_stnum"           , { analyze<array_expansion_domain<z_switv_stnum_domain_t>>, "mem: switv_stnum domain (z_switv_stnum_domain_t)" } },
+    { "boxes"             , { analyze<array_expansion_domain<z_boxes_domain_t>>, "mem: boxes (z_boxes_domain_t)" } },
 #endif
 #ifdef OTHER_DOMAINS
     { "disjInterval"      , { analyze<array_expansion_domain<z_dis_interval_domain_t>>, "mem: disjoint intervals (z_dis_interval_domain_t)" } },
     { "ric"               , { analyze<array_expansion_domain<z_ric_domain_t>>, "mem: numerical congruence (z_ric_domain_t)" } },
     { "dbm"               , { analyze<array_expansion_domain<z_dbm_domain_t>>, "mem: sparse dbm (z_dbm_domain_t)" } },
-    { "boxes"             , { analyze<array_expansion_domain<z_boxes_domain_t>>, "mem: boxes (z_boxes_domain_t)" } },
+    //{ "boxes"             , { analyze<array_expansion_domain<z_boxes_domain_t>>, "mem: boxes (z_boxes_domain_t)" } },
     { "term"              , { analyze<array_expansion_domain<z_term_domain_t>>, "mem: (z_term_domain_t)" } },
     { "term_dbm"          , { analyze<array_expansion_domain<z_term_dbm_t>>, "mem: (z_term_dbm_t)" } },
     { "term_disj_interval", { analyze<array_expansion_domain<z_term_dis_int_t>>, "mem: term x disjoint intervals (z_term_dis_int_t)" } },
     { "num"               , { analyze<array_expansion_domain<z_num_domain_t>>, "mem: term x disjoint interval x sparse dbm (z_num_domain_t)" } },
     { "num_boxes"         , { analyze<array_expansion_domain<z_num_boxes_domain_t>>, "mem: term x boxes x sparse dbm" } },
-    { "wrapped"           , { analyze<array_expansion_domain<z_wrapped_interval_domain_t>>, "mem: wrapped interval domain (z_wrapped_interval_domain_t)" } },
+   // { "wrapped"           , { analyze<array_expansion_domain<z_wrapped_interval_domain_t>>, "mem: wrapped interval domain (z_wrapped_interval_domain_t)" } },
 #endif
 #ifdef NOMEM_DOMAINS
     { "ric-nomem"               , { analyze<z_ric_domain_t>, "numerical congruence (z_ric_domain_t)" } },

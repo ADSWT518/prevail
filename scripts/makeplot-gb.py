@@ -40,8 +40,8 @@ def plot(title, field, units, suffix):
                         linestyle = 'None')
     sp.legend()
 
-plot("Sec vs " + key, 'instructions', 'Time (Sec)', '_sec')
+plot("Sec vs " + key, 'instructions', '', '_sec')
 
-plot("Memory vs " + key, 'instructions', 'Memory (KB)', '_kb')
+plot("Memory vs " + key, 'instructions', '', '_gb')
 
 plt.show()

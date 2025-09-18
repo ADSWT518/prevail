@@ -13,6 +13,10 @@
 #include <crab/domains/intervals.hpp>
 #include <crab/domains/dis_intervals.hpp>
 #include <crab/domains/wrapped_interval_domain.hpp>
+#include <crab/domains/swrapped_interval_domain.hpp>
+#include <crab/domains/tnum_domain.hpp>
+#include <crab/domains/stnum_domain.hpp>
+#include <crab/domains/switv_stnum_domain.hpp>
 #include <crab/domains/sparse_dbm.hpp>                      
 #include <crab/domains/split_dbm.hpp>
 #include <crab/domains/boxes.hpp>                      
@@ -106,5 +110,9 @@ namespace crab {
     typedef array_expansion_domain<z_term_domain_t> z_ae_term_int_t;
     // machine arithmetic domains
     using z_wrapped_interval_domain_t = wrapped_interval_domain<ikos::z_number, varname_t>;
+    using z_swrapped_interval_domain_t = swrapped_interval_domain<ikos::z_number, varname_t>;
+    using z_tnum_domain_t = tnum_domain<ikos::z_number, varname_t>;
+    using z_stnum_domain_t = stnum_domain<ikos::z_number, varname_t>;
+    using z_switv_stnum_domain_t = switv_stnum_domain<ikos::z_number, varname_t>;
   } 
 }

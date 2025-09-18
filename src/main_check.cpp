@@ -125,6 +125,8 @@ int main(int argc, char **argv)
     } else if (domain == "rcp") {
         analyze_rcp(cfg, raw_prog.info);
     } else {
+        bool flag = domain == "linux";
+        //std::cout <<  " domain == linux is " << flag <<"\n";
         const auto [res, seconds] = (domain == "linux")
             ? bpf_verify_program(raw_prog.info.program_type, raw_prog.prog)
             : abs_validate(cfg, domain, raw_prog.info);

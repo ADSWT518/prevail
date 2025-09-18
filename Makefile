@@ -95,6 +95,15 @@ crab_install:
 	    && cmake --build . --target elina && cmake ../ \
 	    && cmake --build . --target install
 
+#rab_install:
+#	mkdir -p $(CRABDIR)/build
+#	cd $(CRABDIR)/build \
+#	    && cmake -DCMAKE_INSTALL_PREFIX=../install/ -DCRAB_USE_LDD=ON -DCRAB_USE_ELINA=ON ../ \
+#	    && cmake --build . --target ldd && cmake ../ \
+#	    && cmake --build . --target elina && cmake ../ \
+#	    && cmake --build . --target install
+#
+
 linux_samples:
 	git clone --depth 1 https://github.com/torvalds/linux.git $(LINUX)
 	cd $(LINUX); git apply counter/linux.patch
